@@ -8,6 +8,9 @@ import { setCurrentPage } from '../../redux/paginationSlice/PaginationSlice'
 import ErrorBoundary from '../error-boundary/ErrorBoundary'
 import NotFound from '../not-found/NotFound'
 import Loader from '../Loader/Loader'
+import { setSortCriteria } from '../../redux/sortSlice/sortSlice'
+import TicketsSort from './tickets-sort/TicketsSort'
+import { filterTickets, sortTickets } from '../../utils/ticketsHelper'
 
 const Tickets: FC = () => {
 	const dispatch = useDispatch()
@@ -18,25 +21,20 @@ const Tickets: FC = () => {
 	const currentPage = useSelector(
 		(state: RootState) => state.pagination.currentPage
 	)
+	const sortCriteria = useSelector((state: RootState) => state.sort.criteria)
 	const ticketsPerPage = 3
 
-	const filteredTickets = tickets.filter(ticket => {
-		if (selectedFilters.all) return true
-		if (selectedFilters.noStops && ticket.stops === 0) return true
-		if (selectedFilters.oneStop && ticket.stops === 1) return true
-		if (selectedFilters.twoStops && ticket.stops === 2) return true
-		if (selectedFilters.threeStops && ticket.stops === 3) return true
-		return false
-	})
+	const filteredTickets = filterTickets(tickets, selectedFilters)
+	const sortedTickets = sortTickets(filteredTickets, sortCriteria)
 
 	const indexOfLastTicket = currentPage * ticketsPerPage
 	const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage
-	const currentTickets = filteredTickets.slice(
+	const currentTickets = sortedTickets.slice(
 		indexOfFirstTicket,
 		indexOfLastTicket
 	)
 
-	const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage)
+	const totalPages = Math.ceil(sortedTickets.length / ticketsPerPage)
 
 	const handlePageChange = async (pageNumber: number) => {
 		setIsLoading(true)
@@ -46,15 +44,23 @@ const Tickets: FC = () => {
 		setIsLoading(false)
 	}
 
-	const showPagination = filteredTickets.length > ticketsPerPage
+	const showPagination = sortedTickets.length > ticketsPerPage
+
+	const handleSortChange = (criteria: string) => {
+		dispatch(setSortCriteria(criteria))
+	}
 
 	return (
 		<div>
 			<TicketsQuantity quantity={filteredTickets.length} />
+			<TicketsSort
+				sortCriteria={sortCriteria}
+				onSortChange={handleSortChange}
+			/>
 			<ErrorBoundary>
 				{isLoading ? (
 					<Loader />
-				) : filteredTickets.length === 0 ? (
+				) : sortedTickets.length === 0 ? (
 					<NotFound />
 				) : (
 					currentTickets.map(ticket => (
