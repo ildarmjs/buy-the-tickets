@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import TicketsCard from './tickets-card/TicketsCard'
+import TicketsQuantity from './tickets-quantity/TicketsQuantity'
 
 const Tickets: FC = () => {
 	const tickets = useSelector((state: RootState) => state.tickets.tickets)
@@ -19,6 +20,7 @@ const Tickets: FC = () => {
 
 	return (
 		<div>
+			<TicketsQuantity quantity={filteredTickets.length} />
 			{filteredTickets.map(ticket => (
 				<TicketsCard ticket={ticket} key={ticket.id} currency={currency} />
 			))}
