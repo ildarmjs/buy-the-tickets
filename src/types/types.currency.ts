@@ -1,0 +1,1 @@
+export type TypeCurrency = 'RUB' | 'USD' | 'EUR'
