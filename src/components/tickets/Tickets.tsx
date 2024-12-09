@@ -5,6 +5,7 @@ import TicketsCard from './tickets-card/TicketsCard'
 import TicketsQuantity from './tickets-quantity/TicketsQuantity'
 import Pagination from '../pagination/Pagination'
 import { setCurrentPage } from '../../redux/paginationSlice/PaginationSlice'
+import ErrorBoundary from '../error-boundary/ErrorBoundary'
 
 const Tickets: FC = () => {
 	const dispatch = useDispatch()
@@ -44,9 +45,12 @@ const Tickets: FC = () => {
 	return (
 		<div>
 			<TicketsQuantity quantity={filteredTickets.length} />
-			{currentTickets.map(ticket => (
-				<TicketsCard ticket={ticket} key={ticket.id} currency={currency} />
-			))}
+			<ErrorBoundary>
+				{currentTickets.map(ticket => (
+					<TicketsCard ticket={ticket} key={ticket.id} currency={currency} />
+				))}
+			</ErrorBoundary>
+
 			{showPagination && (
 				<Pagination
 					currentPage={currentPage}
