@@ -6,6 +6,7 @@ import TicketsCard from './tickets-card/TicketsCard'
 const Tickets: FC = () => {
 	const tickets = useSelector((state: RootState) => state.tickets.tickets)
 	const selectedFilters = useSelector((state: RootState) => state.filters)
+	const currency = useSelector((state: RootState) => state.currency.currency)
 
 	const filteredTickets = tickets.filter(ticket => {
 		if (selectedFilters.all) return true
@@ -17,9 +18,9 @@ const Tickets: FC = () => {
 	})
 
 	return (
-		<div className='col-span-3 col-start-3'>
+		<div>
 			{filteredTickets.map(ticket => (
-				<TicketsCard ticket={ticket} key={ticket.id} />
+				<TicketsCard ticket={ticket} key={ticket.id} currency={currency} />
 			))}
 		</div>
 	)
