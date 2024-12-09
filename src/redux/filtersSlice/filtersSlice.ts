@@ -1,14 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { TypeFilters } from '../../types/types.filters'
 
-interface FiltersState {
-	all: boolean
-	noStops: boolean
-	oneStop: boolean
-	twoStops: boolean
-	threeStops: boolean
-}
-
-const initialState: FiltersState = {
+const initialState: TypeFilters = {
 	all: true,
 	noStops: false,
 	oneStop: false,
@@ -23,17 +16,14 @@ const filtersSlice = createSlice({
 		setFilter(state, action: PayloadAction<string>) {
 			const filter = action.payload
 			if (filter === 'all') {
-				// Включаем "Все", если он был снят
 				state.all = true
 				state.noStops = false
 				state.oneStop = false
 				state.twoStops = false
 				state.threeStops = false
 			} else {
-				// Если снимаем фильтр, нужно проверить, не пустой ли он
-				if (state[filter as keyof FiltersState]) {
-					state[filter as keyof FiltersState] = false
-					// Если все фильтры сняты, включаем "Все"
+				if (state[filter as keyof TypeFilters]) {
+					state[filter as keyof TypeFilters] = false
 					if (
 						!state.noStops &&
 						!state.oneStop &&
@@ -43,9 +33,8 @@ const filtersSlice = createSlice({
 						state.all = true
 					}
 				} else {
-					// Если фильтр не был активен, ставим его активным
 					state.all = false
-					state[filter as keyof FiltersState] = true
+					state[filter as keyof TypeFilters] = true
 				}
 			}
 		},
