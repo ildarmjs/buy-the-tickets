@@ -1,13 +1,17 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import TicketsCard from './tickets-card/TicketsCard'
 import TicketsQuantity from './tickets-quantity/TicketsQuantity'
+import Pagination from '../pagination/Pagination'
 
 const Tickets: FC = () => {
 	const tickets = useSelector((state: RootState) => state.tickets.tickets)
 	const selectedFilters = useSelector((state: RootState) => state.filters)
 	const currency = useSelector((state: RootState) => state.currency.currency)
+
+	const [currentPage, setCurrentPage] = useState(1)
+	const ticketsPerPage = 3
 
 	const filteredTickets = tickets.filter(ticket => {
 		if (selectedFilters.all) return true
@@ -18,12 +22,34 @@ const Tickets: FC = () => {
 		return false
 	})
 
+	const indexOfLastTicket = currentPage * ticketsPerPage
+	const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage
+	const currentTickets = filteredTickets.slice(
+		indexOfFirstTicket,
+		indexOfLastTicket
+	)
+
+	const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage)
+
+	const handlePageChange = (pageNumber: number) => {
+		setCurrentPage(pageNumber)
+	}
+
+	const showPagination = filteredTickets.length > ticketsPerPage
+
 	return (
 		<div>
 			<TicketsQuantity quantity={filteredTickets.length} />
-			{filteredTickets.map(ticket => (
+			{currentTickets.map(ticket => (
 				<TicketsCard ticket={ticket} key={ticket.id} currency={currency} />
 			))}
+			{showPagination && (
+				<Pagination
+					currentPage={currentPage}
+					totalPages={totalPages}
+					onPageChange={handlePageChange}
+				/>
+			)}
 		</div>
 	)
 }
