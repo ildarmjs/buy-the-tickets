@@ -13,7 +13,7 @@ const Pagination: React.FC<TypePaginationProps> = ({
 }) => {
 	const renderPageNumbers = () => {
 		const pageNumbers = []
-		const maxPagesToShow = 2
+		const maxPagesToShow = 3
 
 		let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2))
 		let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1)
