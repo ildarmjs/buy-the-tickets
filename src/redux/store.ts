@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import ticketsReducer from './ticketsSlice/ticketsSlice'
 import filtersReducer from './filtersSlice/filtersSlice'
 import currencyReducer from './currencySlice/currencySlice'
+import paginationReducer from './paginationSlice/PaginationSlice'
 
 export const store = configureStore({
 	reducer: {
 		tickets: ticketsReducer,
 		filters: filtersReducer,
-		currency: currencyReducer
+		currency: currencyReducer,
+		pagination: paginationReducer
 	},
 })
 

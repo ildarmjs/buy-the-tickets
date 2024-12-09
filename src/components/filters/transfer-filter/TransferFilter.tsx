@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../redux/store'
 import { setFilter } from '../../../redux/filtersSlice/filtersSlice'
 import TransferCheckbox from './transfer-checkbox/TransferCheckbox'
+import { resetCurrentPage } from '../../../redux/paginationSlice/PaginationSlice'
 
 const TransferFilter: FC = () => {
 	const dispatch = useDispatch()
@@ -11,6 +12,7 @@ const TransferFilter: FC = () => {
 	const handleFilterChange = useCallback(
 		(filterId: string) => {
 			dispatch(setFilter(filterId))
+			dispatch(resetCurrentPage())
 		},
 		[dispatch]
 	)
