@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
 import dataTickets from '../../data/tickets.json'
 import { TypeTickets } from '../../types/types.tickets'
 export interface TicketsState {
