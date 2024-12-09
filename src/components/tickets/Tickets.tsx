@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import TicketsCard from './tickets-card/TicketsCard'
@@ -7,13 +7,14 @@ import Pagination from '../pagination/Pagination'
 import { setCurrentPage } from '../../redux/paginationSlice/PaginationSlice'
 import ErrorBoundary from '../error-boundary/ErrorBoundary'
 import NotFound from '../not-found/NotFound'
+import Loader from '../Loader/Loader'
 
 const Tickets: FC = () => {
 	const dispatch = useDispatch()
 	const tickets = useSelector((state: RootState) => state.tickets.tickets)
 	const selectedFilters = useSelector((state: RootState) => state.filters)
 	const currency = useSelector((state: RootState) => state.currency.currency)
-
+	const [isLoading, setIsLoading] = useState(false)
 	const currentPage = useSelector(
 		(state: RootState) => state.pagination.currentPage
 	)
@@ -37,8 +38,12 @@ const Tickets: FC = () => {
 
 	const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage)
 
-	const handlePageChange = (pageNumber: number) => {
+	const handlePageChange = async (pageNumber: number) => {
+		setIsLoading(true)
 		dispatch(setCurrentPage(pageNumber))
+		// Имитация задержки загрузки
+		await new Promise(resolve => setTimeout(resolve, 500))
+		setIsLoading(false)
 	}
 
 	const showPagination = filteredTickets.length > ticketsPerPage
@@ -47,7 +52,9 @@ const Tickets: FC = () => {
 		<div>
 			<TicketsQuantity quantity={filteredTickets.length} />
 			<ErrorBoundary>
-				{filteredTickets.length === 0 ? (
+				{isLoading ? (
+					<Loader />
+				) : filteredTickets.length === 0 ? (
 					<NotFound />
 				) : (
 					currentTickets.map(ticket => (
