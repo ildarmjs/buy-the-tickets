@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { TypeCurrency } from '../../types/types.currency'
 
-type CurrencyState = 'RUB' | 'USD' | 'EUR'
+
 
 interface CurrencyStateInterface {
-	currency: CurrencyState
+	currency: TypeCurrency
 }
 
 const initialState: CurrencyStateInterface = {
@@ -14,7 +15,7 @@ const currencySlice = createSlice({
 	name: 'currency',
 	initialState,
 	reducers: {
-		setCurrency(state, action: PayloadAction<CurrencyState>) {
+		setCurrency(state, action: PayloadAction<TypeCurrency>) {
 			state.currency = action.payload
 		},
 	},
