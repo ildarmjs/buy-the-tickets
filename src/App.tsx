@@ -6,7 +6,7 @@ import Filters from './components/filters/Filters'
 const App: FC = () => {
 	return (
 		<Container>
-			<div className='grid grid-cols-5 grid-rows-5 gap-4 mt-10'>
+			<div className='flex gap-10 mt-10'>
 				<Filters />
 				<Tickets />
 			</div>
